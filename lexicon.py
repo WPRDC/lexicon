@@ -1,4 +1,4 @@
-import sys, csv, ckanapi, fire
+import sys, csv, json, ckanapi, fire
 from pprint import pprint
 from credentials import site, ckan_api_key as API_key
 
@@ -115,7 +115,6 @@ def get_ckan_data_dictionary(resource_id,API_key=None):
     #   ckanapi.errors.NotFound: Resource "9d1c01df-2abd-45f3-8748-7b2e1cf8c47f" was not found.
     if 'fields' not in r:
         return None
-
     return r['fields']
 
 
@@ -141,7 +140,12 @@ def update_ckan_data_dictionary(definitions,resource_id,API_key=None):
     return r
 
 def download(resource_id):
-    get_ckan_data_dictionary(resource_id)
+    from credentials import site, ckan_api_key as API_key
+    dd = get_ckan_data_dictionary(resource_id, API_key)
+    filename = "{}-dd.csv".format(resource_id)
+    print("Saving data dictionary to {}".format(filename))
+    with open(filename, 'w') as f:
+        json.dump(dd, f, indent=4)
 
 def upload(resource_id,filename):
     schema = get_schema(site,resource_id,API_key)
