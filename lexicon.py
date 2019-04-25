@@ -64,7 +64,7 @@ def get_resource_parameter(site,resource_id,parameter=None,API_key=None):
     # data on WPRDC.org. (It's not the number of rows in the resource.)
     try:
         ckan = ckanapi.RemoteCKAN(site, apikey=API_key)
-        metadata = resource_show(ckan,resource_id)
+        metadata = ckan.action.resource_show(id=resource_id)
         if parameter is None:
             return metadata
         else:
