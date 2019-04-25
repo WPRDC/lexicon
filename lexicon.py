@@ -147,7 +147,7 @@ def download(resource_id):
     dd = get_ckan_data_dictionary(resource_id, API_key)
     name = get_resource_parameter(site, resource_id, 'name', API_key)
     stub = hyphenate_and_lowercase(name)
-    filename = "{}-{}-dd.csv".format(stub, resource_id)
+    filename = "{}-{}-dd.json".format(stub, resource_id)
     print("Saving data dictionary to {}".format(filename))
     with open(filename, 'w') as f:
         json.dump(dd, f, indent=4)
