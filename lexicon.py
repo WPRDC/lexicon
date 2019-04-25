@@ -1,4 +1,4 @@
-import sys, csv, json, ckanapi, fire
+import sys, csv, json, re, ckanapi, fire
 from pprint import pprint
 from credentials import site, ckan_api_key as API_key
 
@@ -117,6 +117,9 @@ def get_ckan_data_dictionary(resource_id,API_key=None):
         return None
     return r['fields']
 
+def hyphenate_and_lowercase(x):
+    x = x.lower()
+    return re.sub('[^0-9a-zA-Z]+', '-', x)
 
 def update_ckan_data_dictionary(definitions,resource_id,API_key=None):
     # Use the datastore_create endpoint to update the integrated data dictionary
@@ -142,7 +145,9 @@ def update_ckan_data_dictionary(definitions,resource_id,API_key=None):
 def download(resource_id):
     from credentials import site, ckan_api_key as API_key
     dd = get_ckan_data_dictionary(resource_id, API_key)
-    filename = "{}-dd.csv".format(resource_id)
+    name = get_resource_parameter(site, resource_id, 'name', API_key)
+    stub = hyphenate_and_lowercase(name)
+    filename = "{}-{}-dd.csv".format(stub, resource_id)
     print("Saving data dictionary to {}".format(filename))
     with open(filename, 'w') as f:
         json.dump(dd, f, indent=4)
