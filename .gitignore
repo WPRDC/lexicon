@@ -1,0 +1,7 @@
+__pycache__/
+*.csv
+*.pyc
+TODO
+notes.txt
+NOTES
+credentials.py
